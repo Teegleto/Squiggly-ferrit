@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spinning Ferrit (No Clipping)</title>
+  <title>Spinning Ferrit (Stable)</title>
   <style>
     /* Fullscreen purple background */
     html, body {
-      height: 100%;
       margin: 0;
+      height: 100dvh;           /* dynamic viewport height fixes mobile bar jumps */
       background: #7D00FE;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
     }
 
-    /* A square "stage" that always fits in the viewport */
-    .stage {
-      width: 100vmin;   /* vmin = min(vw, vh), so this square always fits */
-      height: 100vmin;
+    /* Centering layer that never moves */
+    .center {
+      position: fixed;
+      inset: 0;                 /* top/right/bottom/left: 0 */
       display: grid;
       place-items: center;
-      /* Optional: uncomment to visualize the safe square */
-      /* outline: 1px dashed rgba(255,255,255,0.2); */
     }
 
-    /* The rotating layer: scale first so corners never exceed the stage */
+    /* Square stage that always fits in view */
+    .stage {
+      /* pick the smallest dimension to make a perfect square that fits */
+      width: min(80vmin, 80dvw, 80dvh);
+      height: min(80vmin, 80dvw, 80dvh);
+      display: grid;
+      place-items: center;
+    }
+
+    /* Rotating square, scaled so corners never clip */
     .spin {
       width: 100%;
       height: 100%;
@@ -34,30 +38,32 @@
       place-items: center;
       transform-origin: center center;
       animation: spinClockwise 8s linear infinite;
-      /* 0.7071 ≈ 1 / sqrt(2). Guarantees no clipping even at 45° for any aspect ratio. */
-      transform: scale(0.7071);
+      will-change: transform;
     }
 
-    /* The image itself just fits inside the spinning square */
+    /* The image itself */
     img {
+      display: block;           /* kills baseline offset */
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      display: block;
+      /* Optional: soft shadow to lift from background */
+      /* filter: drop-shadow(0 0 40px rgba(0,0,0,.35)); */
     }
 
+    /* 0.7071 ~= 1/sqrt(2) guarantees no corner clipping at 45° */
     @keyframes spinClockwise {
       from { transform: scale(0.7071) rotate(0deg); }
       to   { transform: scale(0.7071) rotate(360deg); }
     }
-
-    /* If you want it faster/slower, change 8s above */
   </style>
 </head>
 <body>
-  <div class="stage">
-    <div class="spin">
-      <img src="./Ferrit.JPG" alt="Ferret">
+  <div class="center">
+    <div class="stage">
+      <div class="spin">
+        <img src="./Ferrit.JPG" alt="Ferret">
+      </div>
     </div>
   </div>
 </body>
