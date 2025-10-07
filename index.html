@@ -8,7 +8,7 @@
     html, body {
       height: 100%;
       margin: 0;
-      background: #000;
+      background: #7D00FE; /* your custom purple */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,11 +16,12 @@
     }
 
     img {
-      max-width: 90%;
-      max-height: 90%;
+      width: 70vmin;          /* scales nicely with screen size */
+      height: 70vmin;
       object-fit: contain;
-      animation: spinClockwise 6s linear infinite; /* speed: 8s per rotation */
       transform-origin: center center;
+      animation: spinClockwise 8s linear infinite;
+      filter: drop-shadow(0 0 40px rgba(0,0,0,0.4)); /* optional soft glow */
     }
 
     @keyframes spinClockwise {
