@@ -3,34 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spinning Ferrit (Stable)</title>
+  <title>Spinning Ferrit (Pinned Center)</title>
   <style>
-    /* Fullscreen purple background */
+    /* Fullscreen purple with no scrollbars */
     html, body {
       margin: 0;
-      height: 100dvh;           /* dynamic viewport height fixes mobile bar jumps */
+      height: 100svh;           /* small viewport height = stable on mobile */
       background: #7D00FE;
       overflow: hidden;
     }
 
-    /* Centering layer that never moves */
+    /* Pin an exact center point on screen */
     .center {
       position: fixed;
-      inset: 0;                 /* top/right/bottom/left: 0 */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* true center */
+      /* Square that always fits in view; tweak 80 to taste */
+      width: min(80svmin, 80svw, 80svh);
+      aspect-ratio: 1 / 1;
       display: grid;
       place-items: center;
     }
 
-    /* Square stage that always fits in view */
-    .stage {
-      /* pick the smallest dimension to make a perfect square that fits */
-      width: min(80vmin, 80dvw, 80dvh);
-      height: min(80vmin, 80dvw, 80dvh);
-      display: grid;
-      place-items: center;
-    }
-
-    /* Rotating square, scaled so corners never clip */
+    /* Spin layer: scaled so corners never clip */
     .spin {
       width: 100%;
       height: 100%;
@@ -41,30 +37,33 @@
       will-change: transform;
     }
 
-    /* The image itself */
+    /* Image sizing */
     img {
-      display: block;           /* kills baseline offset */
+      display: block;           /* avoid baseline offsets */
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      /* Optional: soft shadow to lift from background */
-      /* filter: drop-shadow(0 0 40px rgba(0,0,0,.35)); */
     }
 
-    /* 0.7071 ~= 1/sqrt(2) guarantees no corner clipping at 45° */
+    /* 1/sqrt(2) ≈ 0.7071 = no clipping at 45° */
     @keyframes spinClockwise {
       from { transform: scale(0.7071) rotate(0deg); }
       to   { transform: scale(0.7071) rotate(360deg); }
+    }
+
+    /* Optional: account for iOS safe areas if you see nudging near notches */
+    @supports (padding: env(safe-area-inset-top)) {
+      body { padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                        env(safe-area-inset-bottom) env(safe-area-inset-left); }
     }
   </style>
 </head>
 <body>
   <div class="center">
-    <div class="stage">
-      <div class="spin">
-        <img src="./Ferrit.JPG" alt="Ferret">
-      </div>
+    <div class="spin">
+      <img src="./Ferrit.JPG" alt="Ferret">
     </div>
   </div>
 </body>
 </html>
+
