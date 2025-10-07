@@ -3,34 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spinning Ferrit</title>
+  <title>Spinning Ferrit (No Clipping)</title>
   <style>
+    /* Fullscreen purple background */
     html, body {
       height: 100%;
       margin: 0;
-      background: #7D00FE; /* your custom purple */
+      background: #7D00FE;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
     }
 
-    img {
-      width: 70vmin;          /* scales nicely with screen size */
-      height: 70vmin;
-      object-fit: contain;
+    /* A square "stage" that always fits in the viewport */
+    .stage {
+      width: 100vmin;   /* vmin = min(vw, vh), so this square always fits */
+      height: 100vmin;
+      display: grid;
+      place-items: center;
+      /* Optional: uncomment to visualize the safe square */
+      /* outline: 1px dashed rgba(255,255,255,0.2); */
+    }
+
+    /* The rotating layer: scale first so corners never exceed the stage */
+    .spin {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
       transform-origin: center center;
-      animation: spinClockwise 6s linear infinite;
-      filter: drop-shadow(0 0 40px rgba(0,0,0,0.4)); /* optional soft glow */
+      animation: spinClockwise 8s linear infinite;
+      /* 0.7071 ≈ 1 / sqrt(2). Guarantees no clipping even at 45° for any aspect ratio. */
+      transform: scale(0.7071);
+    }
+
+    /* The image itself just fits inside the spinning square */
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     @keyframes spinClockwise {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+      from { transform: scale(0.7071) rotate(0deg); }
+      to   { transform: scale(0.7071) rotate(360deg); }
     }
+
+    /* If you want it faster/slower, change 8s above */
   </style>
 </head>
 <body>
-  <img src="./Ferrit.JPG" alt="Ferret">
+  <div class="stage">
+    <div class="spin">
+      <img src="./Ferrit.JPG" alt="Ferret">
+    </div>
+  </div>
 </body>
 </html>
