@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Squiggly Ferrit</title>
+  <title>Spinning Ferrit</title>
   <style>
     html, body {
       height: 100%;
@@ -12,17 +12,24 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
+
     img {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 90%;
+      max-height: 90%;
       object-fit: contain;
-      /* border-radius: 12px; /* optional soft edges */
-      /* box-shadow: 0 0 40px rgba(0, 0, 0, 0.4); /* optional glow */
+      animation: spinClockwise 8s linear infinite; /* speed: 8s per rotation */
+      transform-origin: center center;
+    }
+
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <img src="./Ferrit.JPG?v=1" alt="Ferret">
+  <img src="./Ferrit.JPG" alt="Ferret">
 </body>
 </html>
